@@ -161,6 +161,7 @@ envmodules:
 hpcParameters:
     maxThreads: 28
     biscuitBlasterThreads: 20
+    biscuitSifterThreads: 20
     samtoolsIndexThreads: 8
     maxMemoryGb: 245
     intermediateMemoryGb: 80
