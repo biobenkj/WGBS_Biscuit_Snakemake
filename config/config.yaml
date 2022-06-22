@@ -39,7 +39,6 @@ trim_galore:
 #     lib_type: biscuit align -b option (for directional vs non-directional alignment)
 biscuit:
     biscuit_blaster_version: v1
-    biscuit_sifter: False
     lib_type: 0
 
 # Input data is from NOMe-seq
@@ -161,7 +160,6 @@ envmodules:
 hpcParameters:
     maxThreads: 28
     biscuitBlasterThreads: 20
-    biscuitSifterThreads: 20
     samtoolsIndexThreads: 8
     maxMemoryGb: 245
     intermediateMemoryGb: 80

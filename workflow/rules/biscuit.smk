@@ -176,69 +176,28 @@ rule biscuit_blaster:
             touch {output.split}
             touch {output.split_bai}
             touch {output.unmapped}
-        elif [ {params.biscuit_version} == "" ]; then
+        elif [ {params.biscuit_version} == "sifter" ]; then
             echo "Using biscuit with dupsifter. This is experimental and use at your own risk!" 2> {log.biscuit_blaster_version}
-        else
-            echo "biscuit: biscuit_blaster_version must be v1 or v2 in config/config.yaml" 2> {log.biscuit_blaster_version}
-        fi
-        """
-
-rule biscuit_sifter:
-    input:
-        reference = get_biscuit_reference,
-        R1 = get_rename_fastq_output_R1,
-        R2 = get_rename_fastq_output_R2,
-    output:
-        bam = f'{output_directory}/analysis/align/{{sample}}.sorted.markdup.bam',
-        bai = f'{output_directory}/analysis/align/{{sample}}.sorted.markdup.bam.bai',
-        flagstat = f'{output_directory}/analysis/align/{{sample}}.sorted.markdup.bam.flagstat',
-    params:
-        # don't include the .fa/.fasta suffix for the reference biscuit idx.
-        LB = config['sam_header']['LB'],
-        ID = '{sample}',
-        PL = config['sam_header']['PL'],
-        PU = config['sam_header']['PU'],
-        SM = '{sample}',
-        lib_type = config['biscuit']['lib_type'],
-        biscuit_version = config['biscuit']['biscuit_sifter'],
-        bb_threads = config['hpcParameters']['biscuitSifterThreads'],
-        st_threads = config['hpcParameters']['samtoolsIndexThreads'],
-    log:
-        biscuit = f'{output_directory}/logs/biscuit/biscuit_sifter.{{sample}}.log',
-        biscuit_sifter = f'{output_directory}/logs/biscuit/sifter_version.{{sample}}.log',
-        dupsifter = f'{output_directory}/logs/biscuit/dupsifter.{{sample}}.log',
-        samtools_view = f'{output_directory}/logs/biscuit/samtools_view.{{sample}}.log',
-        samtools_sort = f'{output_directory}/logs/biscuit/samtools_sort.{{sample}}.log',
-        samtools_index = f'{output_directory}/logs/biscuit/samtools_index.{{sample}}.log',
-        samtools_flagstat = f'{output_directory}/logs/biscuit/samtools_flagstat.{{sample}}.log',
-    benchmark:
-        f'{output_directory}/benchmarks/biscuit_sifter/{{sample}}.txt'
-    threads: config['hpcParameters']['biscuitSifterThreads'] + config['hpcParameters']['samtoolsIndexThreads']
-    resources:
-        mem_gb = config['hpcParameters']['maxMemoryGb'],
-        walltime = config['walltime']['long'],
-    conda:
-        '../envs/biscuit.yaml'
-    envmodules:
-        config['envmodules']['biscuit'],
-        config['envmodules']['samtools'],
-        config['envmodules']['htslib'],
-    shell:
-        """
-        if [ {params.biscuit_version} == "True" ]; then
             # biscuitSifter pipeline
             biscuit align -@ {params.bb_threads} -b {params.lib_type} \
                 -R '@RG\tLB:{params.LB}\tID:{params.ID}\tPL:{params.PL}\tPU:{params.PU}\tSM:{params.SM}' \
                 {input.reference} <(zcat {input.R1}) <(zcat {input.R2}) 2> {log.biscuit} | \
-            dupsifter 2> {log.dupsifter} | \
+            dupsifter 2> {log.samblaster} | \
             samtools sort -@ {params.st_threads} -m 5G -o {output.bam} -O BAM - 2> {log.samtools_sort}
             samtools index -@ {params.st_threads} {output.bam} 2> {log.samtools_index}
 
             # Get some initial stats
             samtools flagstat {output.bam} 1> {output.flagstat} 2> {log.samtools_flagstat}
 
-            # Echo the prototype version
-            echo "biscuit sifter v1" 2> {log.biscuit_sifter}
+            # Add files to ensure smooth output transition
+            touch {output.disc}
+            touch {output.disc_bai}
+            touch {output.split}
+            touch {output.split_bai}
+            touch {output.unmapped}
+        else
+            echo "biscuit: biscuit_blaster_version must be v1 or v2 in config/config.yaml" 2> {log.biscuit_blaster_version}
+        fi
         """
 
 rule biscuit_pileup:
