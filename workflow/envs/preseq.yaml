@@ -4,4 +4,4 @@ channels:
     - bioconda
     - defaults
 dependencies:
-    - preseq=3.1.2
+    - preseq=3.2.0

@@ -11,17 +11,20 @@ The following components are generally in order, but may run in a different orde
 needed.
   + [default off] Generate asset files used during QC related rules
   + [default off] Modify and index genome reference to including methylation controls
-  + [default off] Trim adapters and/or hard clip R2
+  + [default off] Trim FASTQ files
   + [default off] Run Fastq Screen in bisulfite mode
   + Run FastQC on raw FASTQ files
   + Alignment, duplicate tagging, indexing, flagstat of input data (biscuitBlaster v1 and v2)
   + Methylation information extraction (BED Format)
   + Merge C and G beta values in CpG dinucleotide context
-  + [default off] SNP and Epiread extraction
+  + [default off] SNP and epiBED extraction
   + [default off] Run Preseq on aligned BAM
   + MultiQC with BICUIT QC modules specifically for methyaltion data
   + [default off] Generate plots of the observed / expected coverage ratio for different genomic features
   + [default off] Generate percentage of covered CpGs and CpG island coverage figures
+  + [default off] Find coverage uniformity across genome
+  + [default off] Find average methylation values in bins across genome
+  + [default off] Find average methylation values in bins centered on specified regions
   + [default off] QC methylated and unmethylated controls
 
 Many options can be easily specified in the `config.yaml`! Otherwise, the commands in the Snakefile can also be modified
@@ -30,7 +33,7 @@ to meet different needs.
 # Dependencies
 
 The following dependencies are downloaded when running with `--use-conda`, otherwise you must have these in your PATH.
-  + `snakemake` (version 6.0+)
+  + `snakemake` (version 7.0+)
   + `biscuit` (version 1.0.1+)
   + `htslib` (version 1.12+)
   + `samtools` (version 1.12+)
@@ -63,7 +66,6 @@ distrubtion and the conda installed python distribution.
 + Clone the repo (https://github.com/huishenlab/Biscuit_Snakemake_Workflow/tree/master).
   + `git clone git@github.com:huishenlab/Biscuit_Snakemake_Workflow.git (SSH)`
   + `git clone https://github.com/huishenlab/Biscuit_Snakemake_Workflow.git (HTTPS)`
-   
 
 + Place *gzipped* FASTQ files into `raw_data/`. Alternatively, you can specify the location of your *gzipped* FASTQ
 files in `config/config.yaml`.
@@ -91,9 +93,11 @@ example file.
   module is not available, snakemake gives a warning but will run successfully *as long as the required executables are
   in the path*.
 
-+ Then submit the rest workflow to an HPC using something similar to `bin/run_snakemake_workflow.sh` (e.g.,
-`qsub -q [queue_name] bin/run_snakemake_workflow.sh`). `bin/run_snakemake_workflow.sh` works for a PBS/Torque queue
-system, but will need to be modifed to work with a Slurm or other system.
++ Modify slurm submit script with your slurm account and slurm partition.
+
++ Then submit the workflow to an HPC using something similar to `bin/run_snakemake_workflow.slurm` (e.g.,
+`sbatch bin/run_snakemake_workflow.slurm`). `bin/run_snakemake_workflow.slurm` works for a Slurm queue
+system. A PBS/Torque version is available in a previous release on GitHub for those who need it.
 
 # After the workflow
 
@@ -110,7 +114,6 @@ These example files can be mapped to the human genome.
 
 # Example default workflow - 1 sample
 ![workflow diagram](bin/DAGs/dag.png)
-
 
 # Helpful snakemake commands for debugging a workflow
 For more information on Snakemake: https://snakemake.readthedocs.io/en/stable/

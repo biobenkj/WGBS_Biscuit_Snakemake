@@ -30,9 +30,11 @@ rule binned_averages:
     threads: 1
     resources:
         mem_gb = config["hpcParameters"]["smallMemoryGb"],
-        walltime = config["walltime"]["medium"]
+        time = config["runtime"]["medium"]
     benchmark:
         f'{{output_directory}}/benchmarks/binned_averages/{{sample}}.log',
+    conda:
+        '../envs/biscuit.yaml'
     envmodules:
         config["envmodules"]["bedtools"],
     shell:

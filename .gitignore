@@ -13,3 +13,6 @@ merged_reference/
 # Ignore macOS directory preferences and hidden files
 *.DS_Store
 ._*
+
+# Ignore test directory for devel
+test/

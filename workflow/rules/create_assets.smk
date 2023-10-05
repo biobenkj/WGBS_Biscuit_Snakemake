@@ -58,7 +58,7 @@ rule general_assets:
     threads: 1
     resources:
         mem_gb = config['hpcParameters']['intermediateMemoryGb'],
-        walltime = config['walltime']['medium']
+        time = config['runtime']['medium']
     conda:
         '../envs/biscuit.yaml'
     envmodules:
@@ -200,7 +200,7 @@ rule bismap_assets:
     threads: 1
     resources:
         mem_gb = config['hpcParameters']['intermediateMemoryGb'],
-        walltime = config['walltime']['medium']
+        time = config['runtime']['medium']
     conda:
         '../envs/biscuit.yaml'
     envmodules:
@@ -246,7 +246,7 @@ rule wcgw_assets:
     threads: config['hpcParameters']['maxThreads']
     resources:
         mem_gb = config['hpcParameters']['smallMemoryGb'],
-        walltime = config['walltime']['short'],
+        time = config['runtime']['short'],
     conda:
         '../envs/biscuit.yaml'
     envmodules:

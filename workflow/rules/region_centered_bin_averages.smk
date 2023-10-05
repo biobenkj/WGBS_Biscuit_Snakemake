@@ -22,7 +22,7 @@ rule get_regions_for_centered_bin_averages_from_bed:
     threads: 1
     resources:
         mem_gb = config['hpcParameters']['smallMemoryGb'],
-        walltime = config['walltime']['medium'],
+        time = config['runtime']['medium'],
     conda:
         '../envs/python_packages.yaml'
     envmodules:
@@ -46,7 +46,7 @@ rule region_centered_bin_averages:
     threads: 1,
     resources:
         mem_gb = config['hpcParameters']['smallMemoryGb'],
-        walltime = config['walltime']['medium'],
+        time = config['runtime']['medium'],
     conda:
         '../envs/biscuit.yaml'
     envmodules:

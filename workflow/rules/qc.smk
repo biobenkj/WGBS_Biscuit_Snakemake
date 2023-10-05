@@ -43,7 +43,7 @@ rule biscuit_qc:
     threads: 8
     resources:
         mem_gb = config['hpcParameters']['intermediateMemoryGb'],
-        walltime = config['walltime']['medium'],
+        time = config['runtime']['medium'],
     conda:
         '../envs/biscuit.yaml'
     envmodules:
@@ -81,7 +81,7 @@ rule preseq:
     threads: 1,
     resources:
         mem_gb = config['hpcParameters']['intermediateMemoryGb'],
-        walltime = config['walltime']['medium'],
+        time = config['runtime']['medium'],
     conda:
         '../envs/preseq.yaml'
     envmodules:
@@ -142,8 +142,8 @@ rule multiQC:
         f'{output_directory}/benchmarks/multiQC.txt'
     threads: 1
     resources:
-        mem_gb=8,
-        walltime = config['walltime']['medium']
+        mem_gb=config['hpcParameters']['smallMemoryGb'],
+        time = config['runtime']['medium']
     conda:
         '../envs/python_packages.yaml'
     envmodules:
@@ -165,8 +165,8 @@ rule percent_covered:
         f'{output_directory}/benchmarks/percent_covered.txt',
     threads: 1
     resources:
-        mem_gb=8,
-        walltime = config['walltime']['short'],
+        mem_gb=config['hpcParameters']['smallMemoryGb'],
+        time = config['runtime']['short'],
     conda:
         '../envs/python_packages.yaml'
     script:
@@ -189,8 +189,8 @@ if config['control_vectors']:
             f'{output_directory}/benchmarks/qc_vectors/{{sample}}.txt',
         threads: 1
         resources:
-            mem_gb=32,
-            walltime = config['walltime']['medium'],
+            mem_gb=config['hpcParameters']['smallMemoryGb'],
+            time = config['runtime']['medium'],
         conda:
             '../envs/biscuit.yaml'
         envmodules:
@@ -220,8 +220,8 @@ if config['control_vectors']:
             f'{output_directory}/benchmarks/qc_vectors/control_vector_boxplot.txt',
         threads: 1
         resources:
-            mem_gb=32,
-            walltime = config['walltime']['short'],
+            mem_gb=config['hpcParameters']['smallMemoryGb'],
+            time = config['runtime']['short'],
         conda:
             '../envs/r.yaml',
         envmodules:

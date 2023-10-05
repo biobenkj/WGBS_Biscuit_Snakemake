@@ -22,7 +22,7 @@ rule covg_uniformity:
     threads: 1
     resources:
         mem_gb = config['hpcParameters']['intermediateMemoryGb'],
-        walltime = config['walltime']['medium'],
+        time = config['runtime']['medium'],
     conda:
         '../envs/biscuit.yaml'
     envmodules:
@@ -58,7 +58,7 @@ rule uniformity_plot:
     threads: 1
     resources:
         mem_gb = config['hpcParameters']['intermediateMemoryGb'],
-        walltime = config['walltime']['medium'],
+        time = config['runtime']['medium'],
     conda:
         '../envs/python_packages.yaml'
     script:
